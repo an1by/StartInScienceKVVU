@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: white;
+  color: black;
+  font-family: 'Montserrat', serif;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  monospace;
+}
+
+.boxblue {
+  border: 5px solid #4787C2;
+  background-color: #4787C2;
+  border-radius: 1rem;
+  box-shadow: 0 0 15px 0 #4787C2;
+  clear: both;
+}
+
+.reddatbox {
+  border: 5px solid #F86666;
+  background-color: #F86666;
+  border-radius: 0.3rem;
+  box-shadow: 0 0 5px 0 #F86666;
+  width: 1.7vw;
+  height: 1.7vw;
+  clear: both;
+}
+.yellowdatbox {
+  border: 5px solid #F8F266;
+  background-color: #F8F266;
+  border-radius: 0.3rem;
+  box-shadow: 0 0 5px 0 #F8F266;
+  width: 1.7vw;
+  height: 1.7vw;
+  clear: both;
+}
+.greendatbox {
+  border: 5px solid #66F886;
+  background-color: #66F886;
+  border-radius: 0.3rem;
+  box-shadow: 0 0 5px 0 #66F886;
+  width: 1.7vw;
+  height: 1.7vw;
+  clear: both;
+}
+
+.shlagbaum {
+  text-align: center;
+  padding: 6px;
+  background-color: #264C70;
+  border-radius: 0.6rem;
+  clear: both;
+}

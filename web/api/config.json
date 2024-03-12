@@ -1,0 +1,10 @@
+{
+  "mysql": {
+    "host": "217.151.231.7",
+    "port": 3306,
+    "database": "start_in_science",
+    "user": "pixiemay",
+    "password": "_@zmwC&SvD3c8SW0mJ+de@vp"
+  },
+  "jwt_secret": "@$14erXAFSD1qx"
+}

@@ -53,7 +53,13 @@ app.post('/acs/login', async (req, res) => {
     if (req.body != null && "login" in req.body && "password" in req.body) {
         const login = req.body.login,
             password = req.body.password;
-        const user = await database.getACSUser(login, password);
+        let user = null;
+        try {
+            user = await database.getACSUser(login, password);
+        } catch (e) {
+            res.json({"error": "Database error"}).status(400);
+            return
+        }
         if (user != null) {
             let data = user.json;
             data["socket_key"] = process.env.WEBSOCKET_CLIENT_AUTH_KEY;
@@ -62,8 +68,7 @@ app.post('/acs/login', async (req, res) => {
             return;
         }
     }
-    res.json({"error": "Bad request"})
-        .status(400);
+    res.json({"error": "Bad request"}).status(400);
 });
 
 
@@ -72,7 +77,13 @@ app.post('/reports/login', async (req, res) => {
     if (req.body != null && "login" in req.body && "password" in req.body) {
         const login = req.body.login,
             password = req.body.password;
-        const user = await database.getReportUser(login, password);
+        let user = null;
+        try {
+            user = await database.getReportUser(login, password);
+        } catch (e) {
+            res.json({"error": "Database error"}).status(400);
+            return
+        }
         if (user != null) {
             res.json(user.json)
                 .status(200);
@@ -86,7 +97,12 @@ app.post('/reports/login', async (req, res) => {
 app.post("/reports/updateReport", async (req, res) => {
     let user= null;
     if (req.cookies != null && "reports_auth" in req.cookies) {
-        user = await getReportUserFromToken(req.cookies.reports_auth);
+        try {
+            user = await getReportUserFromToken(req.cookies.reports_auth);
+        } catch (e) {
+            res.json({"error": "Database error"}).status(400);
+            return
+        }
     }
     if (user == null) {
         res.status(401).send("Not Authorized")
@@ -101,7 +117,15 @@ app.post("/reports/updateReport", async (req, res) => {
         return
     }
 
-    const result = await database.updateReport(parseInt(req.body.id), req.body.status);
+    let result = false;
+
+    try {
+        result = await database.updateReport(parseInt(req.body.id), req.body.status);
+    } catch (e) {
+        res.json({"error": "Database error"}).status(400);
+        return
+    }
+
     if (!result) {
         res.status(400).send("Bad Request")
         return
@@ -113,8 +137,14 @@ app.post("/reports/updateReport", async (req, res) => {
 app.get('/reports/getReports', async (req, res) => {
     let user= null;
     if (req.cookies != null && "reports_auth" in req.cookies) {
-        user = await getReportUserFromToken(req.cookies.reports_auth);
+        try {
+            user = await getReportUserFromToken(req.cookies.reports_auth);
+        } catch (e) {
+            res.json({"error": "Database error"}).status(400);
+            return
+        }
     }
+
     if (user == null) {
         res.status(401).send("Not Authorized")
         return
@@ -153,9 +183,14 @@ app.post('/reports/createReport', async (req, res) => {
             const encodedToken = req.cookies.reports_auth;
             const user = await getReportUserFromToken(encodedToken);
             if (user != null) {
-                await database.createReport(user.login, req.body.text);
-                res.status(200).send("Successfully posted");
-                return;
+                try {
+                    await database.createReport(user.login, req.body.text);
+                    res.status(200).send("Successfully posted");
+                    return;
+                } catch (e) {
+                    res.json({"error": "Database error"}).status(400);
+                    return
+                }
             }
         }
     }

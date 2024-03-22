@@ -1,6 +1,6 @@
-import {WebSocketServer} from "ws";
+import WebSocket from "ws";
 
-const server = new WebSocketServer({port: parseInt(process.env.WEBSOCKET_PORT)});
+const server = new WebSocket.Server({port: parseInt(process.env.WEBSOCKET_PORT)});
 
 server.on('error', console.error);
 

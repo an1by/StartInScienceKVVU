@@ -7,7 +7,7 @@ export default function Control() {
     const {signOut, getUser, isAuthenticated} = useAuth();
 
     // Web Socket
-    const ws = new WebSocket('ws://api.kpku-cyber.ru/', {
+    const ws = new WebSocket('ws://api.kpku-cyber.ru:21602', {
         perMessageDeflate: false
     });
 

@@ -25,7 +25,7 @@ export default function Login() {
     }, []);
 
     const Login = () => {
-        axios.post("http://localhost:21601/reports/login", {
+        axios.post("https://api.kpku-cyber.ru/reports/login", {
             login: loginValue,
             password: passwordValue
         }, {

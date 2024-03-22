@@ -1,4 +1,3 @@
-import config from "../config.json" assert {type: 'json'}
 import jwt from 'jsonwebtoken'
 
 export let acsUsers = []
@@ -14,7 +13,7 @@ export class ACSUser {
     generateToken() {
         return jwt.sign({
             id: this.id, login: this.login
-        }, config.jwt_secret, {
+        }, process.env.JWT_SECRET, {
             algorithm: 'HS256',
             expiresIn: '1h'
         })

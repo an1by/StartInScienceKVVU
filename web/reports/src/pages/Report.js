@@ -5,7 +5,7 @@ import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
 
 const getReport = async (id) => {
-    const result = await axios.get("http://localhost:21601/reports/getReports?id=" + id, {withCredentials: true});
+    const result = await axios.get("https://api.kpku-cyber.ru/reports/getReports?id=" + id, {withCredentials: true});
     return result.data.reports[0]
 }
 
@@ -37,17 +37,10 @@ export default function CreateReport() {
         }
     }, []);
 
-    const accept = async () => {
-        const result = await axios.post("http://localhost:21601/reports/updateReport", {
+    const changeStatus = async (status) => {
+        const result = await axios.post("https://api.kpku-cyber.ru/reports/updateReport", {
             id: id,
-            status: "accepted"
-        }, {withCredentials: true});
-        navigate("/panel", {replace: true})
-    }
-    const decline = async () => {
-        const result = await axios.post("http://localhost:21601/reports/updateReport", {
-            id: id,
-            status: "declined"
+            status: status
         }, {withCredentials: true});
         navigate("/panel", {replace: true})
     }
@@ -58,12 +51,12 @@ export default function CreateReport() {
                 <a href="#"
                    className="rounded-3xl bg-kvvu-green shadow-[0_0px_10px_rgba(55,201,61,0.5)] px-3.5 py-2.5 w-1/3 h-10 text-sm text-center font-semibold mx-auto"
                    onClick={async (e) => {
-                       await accept();
+                       await changeStatus("accepted");
                    }}>Принять</a>
                 <a href="#"
                    className="rounded-3xl bg-red-600 shadow-[0_0px_10px_rgba(255,0,0,0.5)] px-3.5 py-2.5 w-1/3 h-10 text-sm text-center font-semibold mx-auto"
                    onClick={async (e) => {
-                       await decline();
+                       await changeStatus("declined");
                    }}>Отклонить</a>
             </div>)
         }

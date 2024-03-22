@@ -1,4 +1,3 @@
-import config from "../config.json" assert {type: 'json'}
 import mysql from 'mysql2/promise';
 import {reportUsers, ReportUser} from "../modules/ReportUserModule.js";
 import {Report, reports} from "../modules/ReportModule.js";
@@ -9,7 +8,13 @@ const acsUsersTable = "acs_users";
 const reportsTable = "reports_reports";
 export default class Database {
     constructor() {
-        this.connectionData = config.mysql;
+        this.connectionData = {
+            host: process.env.MYSQL_HOST,
+            port: parseInt(process.env.MYSQL_PORT),
+            database: process.env.MYSQL_DATABASE,
+            user: process.env.MYSQL_USER,
+            password: process.env.MYSQL_PASSWORD
+        }
         this.pool = null;
     }
 
@@ -41,6 +46,21 @@ export default class Database {
             console.log("SELECT * FROM " + acsUsersTable + " WHERE login = '" + login + "' AND password = '" + password + "'")
             const [rows, fields] = await this.pool.query(
                 "SELECT * FROM " + acsUsersTable + " WHERE login = '" + login + "' AND password = '" + password + "'"
+            );
+            if (rows.length > 0) {
+                const row = rows[0]
+                user = new ACSUser(row.id, row.login);
+            }
+        }
+        return user;
+    }
+
+    async getACSUserWithLogin(login) {
+        let user = acsUsers.find(u => u.login === login)
+        if (user == null) {
+            const [rows, fields] = await this.pool.query(
+                `SELECT * FROM ${acsUsersTable} WHERE login = ?`,
+                [login]
             );
             if (rows.length > 0) {
                 const row = rows[0]

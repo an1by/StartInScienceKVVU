@@ -1,10 +1,33 @@
 import {useEffect} from "react";
 import {useNavigate} from 'react-router-dom';
 import useAuth from "../authentication/useAuth";
+import WebSocket from "ws";
 
 export default function Control() {
-    const {signOut, isAuthenticated} = useAuth();
+    const {signOut, getUser, isAuthenticated} = useAuth();
 
+    // Web Socket
+    const ws = new WebSocket('ws://api.kpku-cyber.ru/', {
+        perMessageDeflate: false
+    });
+
+    ws.on('open', () => {
+        if (isAuthenticated)
+            ws.send(`auth|${getUser().socketKey}`)
+    });
+
+    ws.on('message', (data) => {
+        if (data.startsWith("update_state|")) {
+            const split = data.split("|");
+            const id = split[1];
+            const state = split[2];
+            if ("_toggle_" in id) {
+                setToggle(id, state)
+            }
+        }
+    });
+
+    // React
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -16,14 +39,14 @@ export default function Control() {
 
     let switchStatusMap = {}
 
-    function switchToggle(id) {
+    function setToggle(id, status) {
         const switchToggle = document.querySelector(`#${id}`);
 
         if (!(id in switchStatusMap)) {
             switchStatusMap[id] = false;
         }
 
-        let switchStatus = !switchStatusMap[id];
+        let switchStatus = status === "2" ? !switchStatusMap[id] : status === "0";
         switchStatusMap[id] = switchStatus;
         if (switchStatus) {
             switchToggle.classList.remove('bg-kvvu-red', '-translate-x-2')
@@ -32,6 +55,10 @@ export default function Control() {
             switchToggle.classList.add('bg-kvvu-red', '-translate-x-2')
             switchToggle.classList.remove('bg-kvvu-green', 'translate-x-full')
         }
+    }
+
+    function switchToggle(id) {
+        setToggle(id, "2")
     }
 
     const toggle_name = (id, name) => (id === 1 ? "first" : "second") + "_toggle_" + name;

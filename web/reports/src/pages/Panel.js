@@ -31,7 +31,7 @@ function constructReport(id, label, text, status) {
 async function getReports() {
     let reports = []
 
-    const result = await axios.get("http://localhost:21601/reports/getReports", {withCredentials: true});
+    const result = await axios.get("https://api.kpku-cyber.ru/reports/getReports", {withCredentials: true});
     const reportsData = result.data.reports;
     reportsData.forEach(report => {
         const label = `Репорт #${report.id} (${report.login})`;

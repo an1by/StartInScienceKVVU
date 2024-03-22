@@ -25,7 +25,7 @@ export default function Login() {
     }, []);
 
     const login = () => {
-        axios.post("http://localhost:21601/acs/login", {
+        axios.post("https://api.kpku-cyber.ru/acs/login", {
             login: loginValue,
             password: passwordValue
         }, {
@@ -36,7 +36,8 @@ export default function Login() {
             const data = response.data;
             if ("token" in data ) {
                 signIn(data.token, {
-                    login: loginValue
+                    login: loginValue,
+                    socketKey: data.socket_key
                 });
                 redirectToPanel();
             }

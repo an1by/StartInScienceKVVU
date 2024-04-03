@@ -1,31 +1,31 @@
 import {useEffect} from "react";
 import {useNavigate} from 'react-router-dom';
 import useAuth from "../authentication/useAuth";
-import WebSocket from "ws";
+// import WebSocket from "ws";
 
 export default function Control() {
     const {signOut, getUser, isAuthenticated} = useAuth();
 
     // Web Socket
-    const ws = new WebSocket('ws://api.kpku-cyber.ru:21602', {
-        perMessageDeflate: false
-    });
+    // const ws = new WebSocket('ws://api.kpku-cyber.ru:21602', {
+    //     perMessageDeflate: false
+    // });
+    //
+    // ws.on('open', () => {
+    //     if (isAuthenticated)
+    //         ws.send(`auth|${getUser().socketKey}`)
+    // });
 
-    ws.on('open', () => {
-        if (isAuthenticated)
-            ws.send(`auth|${getUser().socketKey}`)
-    });
-
-    ws.on('message', (data) => {
-        if (data.startsWith("update_state|")) {
-            const split = data.split("|");
-            const id = split[1];
-            const state = split[2];
-            if ("_toggle_" in id) {
-                setToggle(id, state)
-            }
-        }
-    });
+    // ws.on('message', (data) => {
+    //     if (data.startsWith("update_state|")) {
+    //         const split = data.split("|");
+    //         const id = split[1];
+    //         const state = split[2];
+    //         if ("_toggle_" in id) {
+    //             setToggle(id, state)
+    //         }
+    //     }
+    // });
 
     // React
     const navigate = useNavigate();

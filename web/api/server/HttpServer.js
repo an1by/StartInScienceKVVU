@@ -35,18 +35,7 @@ await database.connect();
 const app = express();
 app.use(cookieParser());
 app.use(express.json())
-app.use(cors({
-    origin: ["http://localhost:3000"],
-    credentials: true
-}));
-
-app.all("*", function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Credentials", true);
-    res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
-    next();
-});
+app.use(cors());
 
 // Express Rest
 app.post('/acs/login', async (req, res) => {
